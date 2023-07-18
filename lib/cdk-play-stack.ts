@@ -2,8 +2,8 @@ import * as cdk from 'aws-cdk-lib';
 import {Construct} from 'constructs';
 import * as sqs from 'aws-cdk-lib/aws-sqs';
 import * as lambda from 'aws-cdk-lib/aws-lambda';
-import * as path from "path";
-import {Duration} from "aws-cdk-lib";
+import * as lambdaEventSources from 'aws-cdk-lib/aws-lambda-event-sources';
+
 
 export class CdkPlayStack extends cdk.Stack {
     constructor(scope: Construct, id: string, props?: cdk.StackProps) {
@@ -19,5 +19,10 @@ export class CdkPlayStack extends cdk.Stack {
             handler: "index.handler",
 
         });
+
+        queue.grantSendMessages(handler);
+
+        const eventSource = new lambdaEventSources.SqsEventSource(queue);
+        handler.addEventSource(eventSource);
     }
 }
