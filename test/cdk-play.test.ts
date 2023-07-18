@@ -15,3 +15,14 @@ test('SQS Queue Created', () => {
     VisibilityTimeout: 300
   });
 });
+
+test('Lambda function Created', () => {
+  const app = new cdk.App();
+  // WHEN
+  const stack = new CdkPlay.CdkPlayStack(app, 'MyTestStack');
+  // THEN
+  const template = Template.fromStack(stack);
+
+  template.hasResourceProperties('AWS::Lambda::Function', {
+  });
+});
