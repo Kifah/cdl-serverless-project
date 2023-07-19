@@ -2,6 +2,7 @@ import * as cdk from 'aws-cdk-lib';
 import {Construct} from 'constructs';
 import * as sqs from 'aws-cdk-lib/aws-sqs';
 import * as lambda from 'aws-cdk-lib/aws-lambda';
+import * as dynamodb from 'aws-cdk-lib/aws-dynamodb';
 import * as lambdaEventSources from 'aws-cdk-lib/aws-lambda-event-sources';
 
 
@@ -9,20 +10,55 @@ export class CdkPlayStack extends cdk.Stack {
     constructor(scope: Construct, id: string, props?: cdk.StackProps) {
         super(scope, id, props);
 
+
+
+        //add dynamoDB table and give it streaming and permissions needed to forward messages to pre-process lambda
+        const table = new dynamodb.Table(this, 'CdkPlayTable', {
+            partitionKey: {name: 'id', type: dynamodb.AttributeType.STRING},
+            stream: dynamodb.StreamViewType.NEW_IMAGE,
+        });
+
         const queue = new sqs.Queue(this, 'CdkPlayQueue', {
             visibilityTimeout: cdk.Duration.seconds(300)
         });
 
-        const handler = new lambda.Function(this, "CdkPlayHandler", {
+        // a pre-processing lambda receives messages from dynamoDB
+        const preProcessHandler = new lambda.Function(this, "CdkPlayPreProcessHandler", {
             runtime: lambda.Runtime.NODEJS_18_X,
             code: lambda.Code.fromAsset("resources"),
-            handler: "index.handler",
+            handler: "preprocess.handler",
+            environment: {
+                SQS_URL: queue.queueUrl,
+            }
 
         });
 
-        queue.grantSendMessages(handler);
+        const finalHandler = new lambda.Function(this, "CdkPlayHandler", {
+            runtime: lambda.Runtime.NODEJS_18_X,
+            code: lambda.Code.fromAsset("resources"),
+            handler: "final.handler",
 
-        const eventSource = new lambdaEventSources.SqsEventSource(queue);
-        handler.addEventSource(eventSource);
+        });
+
+
+        //////////Handling different permissions
+        //grant send messages from pro-process-lambda to queue
+        queue.grantSendMessages(preProcessHandler);
+
+        table.grantStream(preProcessHandler);
+        const tableEventSource = new lambdaEventSources.DynamoEventSource(table, {
+            startingPosition: lambda.StartingPosition.LATEST,
+            filters: [lambda.FilterCriteria.filter({eventName: lambda.FilterRule.isEqual('INSERT')})],
+        });
+        preProcessHandler.addEventSource(tableEventSource);
+
+
+        //grant permissions to send SQS messages to the lambda function
+        queue.grantSendMessages(finalHandler);
+
+        //lambda handler has sqs messages as source of events.
+        const sqsEventSource = new lambdaEventSources.SqsEventSource(queue);
+        finalHandler.addEventSource(sqsEventSource);
+
     }
 }
