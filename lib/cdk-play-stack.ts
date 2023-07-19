@@ -41,22 +41,15 @@ export class CdkPlayStack extends cdk.Stack {
         });
 
 
-        //////////Handling different permissions
-        //grant send messages from pro-process-lambda to queue
-        queue.grantSendMessages(preProcessHandler);
 
-        table.grantStream(preProcessHandler);
         const tableEventSource = new lambdaEventSources.DynamoEventSource(table, {
             startingPosition: lambda.StartingPosition.LATEST,
             filters: [lambda.FilterCriteria.filter({eventName: lambda.FilterRule.isEqual('INSERT')})],
         });
         preProcessHandler.addEventSource(tableEventSource);
-
-
-        //grant permissions to send SQS messages to the lambda function
+        table.grantStream(preProcessHandler);
+        queue.grantSendMessages(preProcessHandler);
         queue.grantSendMessages(finalHandler);
-
-        //lambda handler has sqs messages as source of events.
         const sqsEventSource = new lambdaEventSources.SqsEventSource(queue);
         finalHandler.addEventSource(sqsEventSource);
 
