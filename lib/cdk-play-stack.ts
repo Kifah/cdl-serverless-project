@@ -11,11 +11,12 @@ export class CdkPlayStack extends cdk.Stack {
         super(scope, id, props);
 
 
-
         //add dynamoDB table and give it streaming and permissions needed to forward messages to pre-process lambda
         const table = new dynamodb.Table(this, 'CdkPlayTable', {
             partitionKey: {name: 'id', type: dynamodb.AttributeType.STRING},
-            stream: dynamodb.StreamViewType.NEW_IMAGE,
+            billingMode: dynamodb.BillingMode.PAY_PER_REQUEST,
+            removalPolicy: cdk.RemovalPolicy.DESTROY,
+            stream: dynamodb.StreamViewType.NEW_IMAGE
         });
 
         const queue = new sqs.Queue(this, 'CdkPlayQueue', {
@@ -27,19 +28,20 @@ export class CdkPlayStack extends cdk.Stack {
             runtime: lambda.Runtime.NODEJS_18_X,
             code: lambda.Code.fromAsset("resources"),
             handler: "preprocess.handler",
+            tracing: lambda.Tracing.ACTIVE,
             environment: {
                 SQS_URL: queue.queueUrl,
             }
 
         });
 
-        const finalHandler = new lambda.Function(this, "CdkPlayHandler", {
+        const postProcessHandler = new lambda.Function(this, "CdkPlayHandler", {
             runtime: lambda.Runtime.NODEJS_18_X,
+            tracing: lambda.Tracing.ACTIVE,
             code: lambda.Code.fromAsset("resources"),
             handler: "final.handler",
 
         });
-
 
 
         const tableEventSource = new lambdaEventSources.DynamoEventSource(table, {
@@ -47,11 +49,11 @@ export class CdkPlayStack extends cdk.Stack {
             filters: [lambda.FilterCriteria.filter({eventName: lambda.FilterRule.isEqual('INSERT')})],
         });
         preProcessHandler.addEventSource(tableEventSource);
-        table.grantStream(preProcessHandler);
+        table.grantStreamRead(preProcessHandler);
         queue.grantSendMessages(preProcessHandler);
-        queue.grantSendMessages(finalHandler);
+        queue.grantConsumeMessages(postProcessHandler);
         const sqsEventSource = new lambdaEventSources.SqsEventSource(queue);
-        finalHandler.addEventSource(sqsEventSource);
+        postProcessHandler.addEventSource(sqsEventSource);
 
     }
 }
