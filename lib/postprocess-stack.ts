@@ -23,7 +23,7 @@ export class PostprocessStack extends cdk.Stack {
         // a pre-processing lambda receives messages from dynamoDB
         const preProcessHandler = new NodejsFunction(this, "CdkPlayPreProcessHandler", {
             runtime: lambda.Runtime.NODEJS_18_X,
-            entry: 'resources/preprocess.ts',
+            entry: 'resources/postprocess/preprocess.ts',
             handler: "handler",
             tracing: lambda.Tracing.ACTIVE,
             environment: {
@@ -34,7 +34,7 @@ export class PostprocessStack extends cdk.Stack {
         const postProcessHandler = new NodejsFunction(this, "CdkPlayPostProcessHandler", {
             runtime: lambda.Runtime.NODEJS_18_X,
             tracing: lambda.Tracing.ACTIVE,
-            entry: 'resources/postprocess.ts',
+            entry: 'resources/postprocess/postprocess.ts',
             handler: "handler",
 
         });
