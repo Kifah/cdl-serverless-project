@@ -1,15 +1,15 @@
-import {DynamoDBStreamEvent, Context} from "aws-lambda";
-import {SQSClient, SendMessageCommand, SendMessageRequest} from "@aws-sdk/client-sqs";
+import {DynamoDBStreamEvent} from "aws-lambda";
+import {SQSClient, SendMessageCommand} from "@aws-sdk/client-sqs";
+import {Logger, ILogObj} from "tslog";
 
 
 const client = new SQSClient({region: "eu-central-1"});
+const log: Logger<ILogObj> = new Logger();
 
-async function handler(event: DynamoDBStreamEvent, context: Context) {
+async function handler(event: DynamoDBStreamEvent) {
 
-    let message: string;
-    message = JSON.stringify(event.Records?.pop()?.dynamodb?.NewImage);
-    console.log(message);
-    /** @type SendMessageRequest */
+    const message = JSON.stringify(event.Records?.pop()?.dynamodb?.NewImage);
+    log.info(message);
     const params = {
         DelaySeconds: 2,
         QueueUrl: process.env.SQS_URL,
@@ -17,10 +17,10 @@ async function handler(event: DynamoDBStreamEvent, context: Context) {
     }
     try {
         const data = await client.send(new SendMessageCommand(params));
-        console.log("Success", data);
+        log.info("Success: ", data);
 
     } catch (error) {
-        console.error(error)
+        log.error(error);
 
     }
 
