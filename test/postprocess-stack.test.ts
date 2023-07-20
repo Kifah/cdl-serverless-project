@@ -28,11 +28,7 @@ test('Has SQS', () => {
 test('Has Lambda with correct functions', () => {
 
     template.hasResourceProperties("AWS::Lambda::Function", {
-        Handler: "preprocess.handler",
-        Runtime: "nodejs18.x",
-    });
-    template.hasResourceProperties("AWS::Lambda::Function", {
-        Handler: "final.handler",
+        Handler: "index.handler",
         Runtime: "nodejs18.x",
     });
 

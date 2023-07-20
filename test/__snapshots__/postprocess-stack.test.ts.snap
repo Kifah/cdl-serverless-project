@@ -10,22 +10,27 @@ exports[`Matches the snapshot 1`] = `
     },
   },
   "Resources": {
-    "CdkPlayHandler7964437C": {
+    "CdkPlayPostProcessHandler025D545F": {
       "DependsOn": [
-        "CdkPlayHandlerServiceRoleDefaultPolicy37A2C2CC",
-        "CdkPlayHandlerServiceRoleFD3E9DC6",
+        "CdkPlayPostProcessHandlerServiceRoleDefaultPolicyA222676E",
+        "CdkPlayPostProcessHandlerServiceRole76F78D2B",
       ],
       "Properties": {
         "Code": {
           "S3Bucket": {
             "Fn::Sub": "cdk-hnb659fds-assets-\${AWS::AccountId}-\${AWS::Region}",
           },
-          "S3Key": "d47d116b1f2122ed5aa916321f98be29f41eb9a699c9cc4c4c56c5f903e66ee3.zip",
+          "S3Key": "770c6a42fdb3c8feb3e26645f89d43aa409a7c758b4325754fc4b62de91b2c1b.zip",
         },
-        "Handler": "final.handler",
+        "Environment": {
+          "Variables": {
+            "AWS_NODEJS_CONNECTION_REUSE_ENABLED": "1",
+          },
+        },
+        "Handler": "index.handler",
         "Role": {
           "Fn::GetAtt": [
-            "CdkPlayHandlerServiceRoleFD3E9DC6",
+            "CdkPlayPostProcessHandlerServiceRole76F78D2B",
             "Arn",
           ],
         },
@@ -36,47 +41,7 @@ exports[`Matches the snapshot 1`] = `
       },
       "Type": "AWS::Lambda::Function",
     },
-    "CdkPlayHandlerServiceRoleDefaultPolicy37A2C2CC": {
-      "Properties": {
-        "PolicyDocument": {
-          "Statement": [
-            {
-              "Action": [
-                "xray:PutTraceSegments",
-                "xray:PutTelemetryRecords",
-              ],
-              "Effect": "Allow",
-              "Resource": "*",
-            },
-            {
-              "Action": [
-                "sqs:ReceiveMessage",
-                "sqs:ChangeMessageVisibility",
-                "sqs:GetQueueUrl",
-                "sqs:DeleteMessage",
-                "sqs:GetQueueAttributes",
-              ],
-              "Effect": "Allow",
-              "Resource": {
-                "Fn::GetAtt": [
-                  "CdkPlayQueue78BDD396",
-                  "Arn",
-                ],
-              },
-            },
-          ],
-          "Version": "2012-10-17",
-        },
-        "PolicyName": "CdkPlayHandlerServiceRoleDefaultPolicy37A2C2CC",
-        "Roles": [
-          {
-            "Ref": "CdkPlayHandlerServiceRoleFD3E9DC6",
-          },
-        ],
-      },
-      "Type": "AWS::IAM::Policy",
-    },
-    "CdkPlayHandlerServiceRoleFD3E9DC6": {
+    "CdkPlayPostProcessHandlerServiceRole76F78D2B": {
       "Properties": {
         "AssumeRolePolicyDocument": {
           "Statement": [
@@ -107,7 +72,47 @@ exports[`Matches the snapshot 1`] = `
       },
       "Type": "AWS::IAM::Role",
     },
-    "CdkPlayHandlerSqsEventSourcePostProcessStackCdkPlayQueue68C56F146366F72E": {
+    "CdkPlayPostProcessHandlerServiceRoleDefaultPolicyA222676E": {
+      "Properties": {
+        "PolicyDocument": {
+          "Statement": [
+            {
+              "Action": [
+                "xray:PutTraceSegments",
+                "xray:PutTelemetryRecords",
+              ],
+              "Effect": "Allow",
+              "Resource": "*",
+            },
+            {
+              "Action": [
+                "sqs:ReceiveMessage",
+                "sqs:ChangeMessageVisibility",
+                "sqs:GetQueueUrl",
+                "sqs:DeleteMessage",
+                "sqs:GetQueueAttributes",
+              ],
+              "Effect": "Allow",
+              "Resource": {
+                "Fn::GetAtt": [
+                  "CdkPlayQueue78BDD396",
+                  "Arn",
+                ],
+              },
+            },
+          ],
+          "Version": "2012-10-17",
+        },
+        "PolicyName": "CdkPlayPostProcessHandlerServiceRoleDefaultPolicyA222676E",
+        "Roles": [
+          {
+            "Ref": "CdkPlayPostProcessHandlerServiceRole76F78D2B",
+          },
+        ],
+      },
+      "Type": "AWS::IAM::Policy",
+    },
+    "CdkPlayPostProcessHandlerSqsEventSourcePostProcessStackCdkPlayQueue68C56F146FEA2067": {
       "Properties": {
         "EventSourceArn": {
           "Fn::GetAtt": [
@@ -116,7 +121,7 @@ exports[`Matches the snapshot 1`] = `
           ],
         },
         "FunctionName": {
-          "Ref": "CdkPlayHandler7964437C",
+          "Ref": "CdkPlayPostProcessHandler025D545F",
         },
       },
       "Type": "AWS::Lambda::EventSourceMapping",
@@ -131,16 +136,17 @@ exports[`Matches the snapshot 1`] = `
           "S3Bucket": {
             "Fn::Sub": "cdk-hnb659fds-assets-\${AWS::AccountId}-\${AWS::Region}",
           },
-          "S3Key": "d47d116b1f2122ed5aa916321f98be29f41eb9a699c9cc4c4c56c5f903e66ee3.zip",
+          "S3Key": "4e2c262321023f8f4e1be05176ffbebedeb0b59830e70ceb86018c522acf3fd7.zip",
         },
         "Environment": {
           "Variables": {
+            "AWS_NODEJS_CONNECTION_REUSE_ENABLED": "1",
             "SQS_URL": {
               "Ref": "CdkPlayQueue78BDD396",
             },
           },
         },
-        "Handler": "preprocess.handler",
+        "Handler": "index.handler",
         "Role": {
           "Fn::GetAtt": [
             "CdkPlayPreProcessHandlerServiceRole55175F02",
