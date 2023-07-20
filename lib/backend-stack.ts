@@ -14,11 +14,23 @@ export class BackendStack extends cdk.Stack {
     constructor(scope: Construct, id: string, props?: cdk.StackProps) {
         super(scope, id, props);
 
+        //add dynamoDB table and give it streaming and permissions needed to forward messages to pre-process lambda
+        this.backendTable = new dynamodb.Table(this, 'CdkPlayBackendTable', {
+            partitionKey: {name: 'id', type: dynamodb.AttributeType.STRING},
+            billingMode: dynamodb.BillingMode.PAY_PER_REQUEST,
+            removalPolicy: cdk.RemovalPolicy.DESTROY,
+            stream: dynamodb.StreamViewType.NEW_IMAGE
+        });
+
+
         const backendCarsLambda = new NodejsFunction(this, 'CdkPlayBackendLambda', {
             runtime: lambda.Runtime.NODEJS_18_X,
             tracing: lambda.Tracing.ACTIVE,
             entry: 'resources/backend/backend.ts',
             handler: "handler",
+            environment: {
+                TABLE_NAME:this.backendTable.tableName
+            }
         });
 
         const lambdaIntegration = new LambdaIntegration(backendCarsLambda);
@@ -29,14 +41,7 @@ export class BackendStack extends cdk.Stack {
         spacesResource.addMethod('GET', lambdaIntegration);
         spacesResource.addMethod('POST', lambdaIntegration);
 
-
-        //add dynamoDB table and give it streaming and permissions needed to forward messages to pre-process lambda
-        this.backendTable = new dynamodb.Table(this, 'CdkPlayBackendTable', {
-            partitionKey: {name: 'id', type: dynamodb.AttributeType.STRING},
-            billingMode: dynamodb.BillingMode.PAY_PER_REQUEST,
-            removalPolicy: cdk.RemovalPolicy.DESTROY,
-            stream: dynamodb.StreamViewType.NEW_IMAGE
-        });
+        this.backendTable.grantReadWriteData(backendCarsLambda);
 
 
     }
