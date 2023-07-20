@@ -2,8 +2,10 @@ import * as cdk from 'aws-cdk-lib';
 import {Construct} from 'constructs';
 import * as sqs from 'aws-cdk-lib/aws-sqs';
 import * as lambda from 'aws-cdk-lib/aws-lambda';
+import {NodejsFunction} from 'aws-cdk-lib/aws-lambda-nodejs';
 import * as dynamodb from 'aws-cdk-lib/aws-dynamodb';
 import * as lambdaEventSources from 'aws-cdk-lib/aws-lambda-event-sources';
+import {join} from 'path';
 
 interface PostprocessStackProps extends cdk.StackProps {
     backendTable: dynamodb.ITable
@@ -19,22 +21,21 @@ export class PostprocessStack extends cdk.Stack {
         });
 
         // a pre-processing lambda receives messages from dynamoDB
-        const preProcessHandler = new lambda.Function(this, "CdkPlayPreProcessHandler", {
+        const preProcessHandler = new NodejsFunction(this, "CdkPlayPreProcessHandler", {
             runtime: lambda.Runtime.NODEJS_18_X,
-            code: lambda.Code.fromAsset("resources"),
-            handler: "preprocess.handler",
+            entry: 'resources/preprocess.ts',
+            handler: "handler",
             tracing: lambda.Tracing.ACTIVE,
             environment: {
                 SQS_URL: queue.queueUrl,
             }
-
         });
 
-        const postProcessHandler = new lambda.Function(this, "CdkPlayHandler", {
+        const postProcessHandler = new NodejsFunction(this, "CdkPlayHandler", {
             runtime: lambda.Runtime.NODEJS_18_X,
             tracing: lambda.Tracing.ACTIVE,
-            code: lambda.Code.fromAsset("resources"),
-            handler: "final.handler",
+            entry: 'resources/postprocess.ts',
+            handler: "handler",
 
         });
 
