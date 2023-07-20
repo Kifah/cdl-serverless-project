@@ -5,19 +5,14 @@ import * as lambda from 'aws-cdk-lib/aws-lambda';
 import * as dynamodb from 'aws-cdk-lib/aws-dynamodb';
 import * as lambdaEventSources from 'aws-cdk-lib/aws-lambda-event-sources';
 
+interface PostprocessStackProps extends cdk.StackProps {
+    backendTable: dynamodb.ITable
+}
 
-export class CdkPlayStack extends cdk.Stack {
-    constructor(scope: Construct, id: string, props?: cdk.StackProps) {
+export class PostprocessStack extends cdk.Stack {
+    constructor(scope: Construct, id: string, props: PostprocessStackProps) {
         super(scope, id, props);
 
-
-        //add dynamoDB table and give it streaming and permissions needed to forward messages to pre-process lambda
-        const table = new dynamodb.Table(this, 'CdkPlayTable', {
-            partitionKey: {name: 'id', type: dynamodb.AttributeType.STRING},
-            billingMode: dynamodb.BillingMode.PAY_PER_REQUEST,
-            removalPolicy: cdk.RemovalPolicy.DESTROY,
-            stream: dynamodb.StreamViewType.NEW_IMAGE
-        });
 
         const queue = new sqs.Queue(this, 'CdkPlayQueue', {
             visibilityTimeout: cdk.Duration.seconds(300)
@@ -44,12 +39,12 @@ export class CdkPlayStack extends cdk.Stack {
         });
 
 
-        const tableEventSource = new lambdaEventSources.DynamoEventSource(table, {
+        const tableEventSource = new lambdaEventSources.DynamoEventSource(props.backendTable, {
             startingPosition: lambda.StartingPosition.LATEST,
             filters: [lambda.FilterCriteria.filter({eventName: lambda.FilterRule.isEqual('INSERT')})],
         });
         preProcessHandler.addEventSource(tableEventSource);
-        table.grantStreamRead(preProcessHandler);
+        props.backendTable.grantStreamRead(preProcessHandler);
         queue.grantSendMessages(preProcessHandler);
         queue.grantConsumeMessages(postProcessHandler);
         const sqsEventSource = new lambdaEventSources.SqsEventSource(queue);

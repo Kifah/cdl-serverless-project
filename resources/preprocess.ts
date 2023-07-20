@@ -1,10 +1,13 @@
-const {SQSClient, SendMessageCommand, SendMessageRequest: SendMessageRequest} = require('@aws-sdk/client-sqs')
+import {DynamoDBStreamEvent, Context} from "aws-lambda";
+import {SQSClient, SendMessageCommand, SendMessageRequest} from "@aws-sdk/client-sqs";
+
 
 const client = new SQSClient({region: "eu-central-1"});
 
-exports.handler = async function (event: any, context: any) {
+async function handler(event: DynamoDBStreamEvent, context: Context) {
 
-    const message = JSON.stringify(event.Records[0].dynamodb.NewImage);
+    let message: string;
+    message = JSON.stringify(event.Records?.pop()?.dynamodb?.NewImage);
     console.log(message);
     /** @type SendMessageRequest */
     const params = {
@@ -22,3 +25,5 @@ exports.handler = async function (event: any, context: any) {
     }
 
 }
+
+export {handler}
