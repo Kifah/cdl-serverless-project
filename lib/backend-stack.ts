@@ -37,7 +37,7 @@ export class BackendStack extends cdk.Stack {
 
 
         const backendRestApi = new RestApi(this, 'CdkPlayBackendApi');
-        const spacesResource = backendRestApi.root.addResource('cars');
+        const spacesResource = backendRestApi.root.addResource('issues');
         spacesResource.addMethod('GET', lambdaIntegration);
         spacesResource.addMethod('POST', lambdaIntegration);
 
