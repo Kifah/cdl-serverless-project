@@ -1,7 +1,7 @@
 import {mockClient} from "aws-sdk-client-mock";
 
 import {SQSClient, SendMessageCommand, SendMessageRequest} from "@aws-sdk/client-sqs";
-import {handler} from "../../resources/postprocess/preprocess";
+import {handler} from "../../../resources/postprocess/preprocess";
 // @ts-ignore
 import * as event from "./events/DynamoDBStreamEvent.json";
 
