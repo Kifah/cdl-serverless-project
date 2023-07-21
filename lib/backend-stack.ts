@@ -23,7 +23,7 @@ export class BackendStack extends cdk.Stack {
         });
 
 
-        const backendCarsLambda = new NodejsFunction(this, 'CdkPlayBackendHandler', {
+        const backendLambda = new NodejsFunction(this, 'CdkPlayBackendHandler', {
             runtime: lambda.Runtime.NODEJS_18_X,
             tracing: lambda.Tracing.ACTIVE,
             entry: 'resources/backend/backend.ts',
@@ -33,7 +33,7 @@ export class BackendStack extends cdk.Stack {
             }
         });
 
-        const lambdaIntegration = new LambdaIntegration(backendCarsLambda);
+        const lambdaIntegration = new LambdaIntegration(backendLambda);
 
 
         const backendRestApi = new RestApi(
@@ -43,7 +43,7 @@ export class BackendStack extends cdk.Stack {
         spacesResource.addMethod('GET', lambdaIntegration);
         spacesResource.addMethod('POST', lambdaIntegration);
 
-        this.backendTable.grantReadWriteData(backendCarsLambda);
+        this.backendTable.grantReadWriteData(backendLambda);
 
         new CfnOutput(this, 'ApiEndpoint', {
             value: backendRestApi.url
