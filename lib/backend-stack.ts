@@ -29,15 +29,17 @@ export class BackendStack extends cdk.Stack {
             entry: 'resources/backend/backend.ts',
             handler: "handler",
             environment: {
-                TABLE_NAME:this.backendTable.tableName
+                TABLE_NAME: this.backendTable.tableName
             }
         });
 
         const lambdaIntegration = new LambdaIntegration(backendCarsLambda);
 
 
-        const backendRestApi = new RestApi(this, 'CdkPlayBackendApi');
-        const spacesResource = backendRestApi.root.addResource('issues');
+        const backendRestApi = new RestApi(
+            this, 'CdkPlayBackendApi');
+        const spacesResource =
+            backendRestApi.root.addResource('issues');
         spacesResource.addMethod('GET', lambdaIntegration);
         spacesResource.addMethod('POST', lambdaIntegration);
 
