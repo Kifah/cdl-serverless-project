@@ -1,6 +1,11 @@
-# Welcome to your CDK TypeScript project
+# Sample Serverless CDK Project (in Typescript)
 
-This is a blank project for CDK development with TypeScript.
+This is an example project for CDK development with TypeScript.
+It consists of serverless elements like: 
+* Api-Gateway
+* DynamoDB
+* SQS
+* Lambda functions
 
 The `cdk.json` file tells the CDK Toolkit how to execute your app.
 
