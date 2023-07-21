@@ -14,6 +14,6 @@ export class CiCdStack extends cdk.Stack {
                 commands: ['npm ci', 'npm run build','npm run test', 'npx cdk synth']
             })
         });
-        pipeline.addStage(new AppStage(this, "test", {}));
+        pipeline.addStage(new AppStage(this, "Test-Deployment", {}));
     }
 }
