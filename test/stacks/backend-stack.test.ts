@@ -1,6 +1,6 @@
 import * as cdk from 'aws-cdk-lib';
 import {Template} from 'aws-cdk-lib/assertions';
-import * as Backend from '../../lib/backend-stack';
+import * as Backend from '../../lib/application/backend-stack';
 
 
 const app = new cdk.App();

@@ -1,9 +1,9 @@
 #!/usr/bin/env node
 import 'source-map-support/register';
 import * as cdk from 'aws-cdk-lib';
-import {PostprocessStack} from '../lib/postprocess-stack';
-import {BackendStack} from "../lib/backend-stack";
-import {CiCdStack} from "../lib/ci-cd-stack";
+import {PostprocessStack} from '../lib/application/postprocess-stack';
+import {BackendStack} from "../lib/application/backend-stack";
+import {CiCdStack} from "../lib/infrastructure/ci-cd-stack";
 // import {AwsSolutionsChecks} from "cdk-nag";
 
 const app = new cdk.App();
