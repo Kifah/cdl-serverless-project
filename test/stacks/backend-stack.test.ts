@@ -15,7 +15,6 @@ test('Has DynamoDB', () => {
 
 });
 
-
 test("Matches the snapshot", () => {
     expect(template.toJSON()).toMatchSnapshot();
 });
