@@ -3,8 +3,8 @@ import {Construct} from 'constructs';
 import * as dynamodb from 'aws-cdk-lib/aws-dynamodb';
 import {LambdaIntegration, RestApi} from "aws-cdk-lib/aws-apigateway";
 import {NodejsFunction} from "aws-cdk-lib/aws-lambda-nodejs";
-import {Runtime} from "aws-cdk-lib/aws-lambda";
 import * as lambda from "aws-cdk-lib/aws-lambda";
+import {CfnOutput} from "aws-cdk-lib";
 
 
 export class BackendStack extends cdk.Stack {
@@ -19,11 +19,12 @@ export class BackendStack extends cdk.Stack {
             partitionKey: {name: 'id', type: dynamodb.AttributeType.STRING},
             billingMode: dynamodb.BillingMode.PAY_PER_REQUEST,
             removalPolicy: cdk.RemovalPolicy.DESTROY,
+            pointInTimeRecovery: true,
             stream: dynamodb.StreamViewType.NEW_IMAGE
         });
 
 
-        const backendCarsLambda = new NodejsFunction(this, 'CdkPlayBackendLambda', {
+        const backendCarsLambda = new NodejsFunction(this, 'CdkPlayBackendHandler', {
             runtime: lambda.Runtime.NODEJS_18_X,
             tracing: lambda.Tracing.ACTIVE,
             entry: 'resources/backend/backend.ts',
@@ -45,6 +46,9 @@ export class BackendStack extends cdk.Stack {
 
         this.backendTable.grantReadWriteData(backendCarsLambda);
 
+        new CfnOutput(this, 'ApiEndpoint', {
+            value: backendRestApi.url
+        });
 
     }
 }
