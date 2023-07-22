@@ -85,6 +85,11 @@ exports[`Matches the snapshot 1`] = `
               "Resource": "*",
             },
             {
+              "Action": "appconfig:GetConfiguration",
+              "Effect": "Allow",
+              "Resource": "arn:aws:appconfig:eu-central-1:832476498399:*",
+            },
+            {
               "Action": [
                 "sqs:ReceiveMessage",
                 "sqs:ChangeMessageVisibility",
