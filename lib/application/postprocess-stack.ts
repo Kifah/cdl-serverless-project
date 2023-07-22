@@ -6,8 +6,15 @@ import {NodejsFunction} from 'aws-cdk-lib/aws-lambda-nodejs';
 import * as dynamodb from 'aws-cdk-lib/aws-dynamodb';
 import * as lambdaEventSources from 'aws-cdk-lib/aws-lambda-event-sources';
 
+export enum DeployEnv {
+    'test',
+    'prod',
+}
+
 interface PostprocessStackProps extends cdk.StackProps {
-    backendTable: dynamodb.ITable
+    backendTable: dynamodb.ITable,
+    deployEnv: DeployEnv
+
 }
 
 export class PostprocessStack extends cdk.Stack {

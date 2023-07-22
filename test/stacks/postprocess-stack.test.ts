@@ -2,11 +2,15 @@ import * as cdk from 'aws-cdk-lib';
 import {Template} from 'aws-cdk-lib/assertions';
 import * as Backend from '../../lib/application/backend-stack';
 import * as PostProcess from '../../lib/application/postprocess-stack';
+import {DeployEnv} from "../../lib/application/postprocess-stack";
 
 
 const app = new cdk.App();
 const backendStack = new Backend.BackendStack(app, 'BackendTestStack');
-const postprocessStack = new PostProcess.PostprocessStack(app, 'PostProcessStack', {backendTable: backendStack.backendTable});
+const postprocessStack = new PostProcess.PostprocessStack(app, 'PostProcessStack', {
+    backendTable: backendStack.backendTable,
+    deployEnv: DeployEnv.test
+});
 const template = Template.fromStack(postprocessStack);
 
 // test('Has DynamoDB', () => {
