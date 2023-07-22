@@ -5,7 +5,6 @@ const client = new AppConfigClient({region: "eu-central-1"});
 
 
 async function handler(event: SQSEvent) {
-    const client = new AppConfigClient({region: "eu-central-1"});
 
     const input = { // GetConfigurationRequest
         Application: "u3qxe82", // required
