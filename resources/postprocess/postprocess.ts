@@ -23,7 +23,7 @@ async function handler(event: SQSEvent) {
     console.log('notification will be sent to:');
     console.log(configuration);
     console.log(JSON.stringify(event));
-    //console.log(event.Records[0].body);
+    console.log(event.Records[0].body);
 }
 
 export {handler}
