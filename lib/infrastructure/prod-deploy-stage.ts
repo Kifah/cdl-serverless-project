@@ -3,7 +3,7 @@ import {Construct} from "constructs";
 import {BackendStack} from "../application/backend-stack";
 import {DeployEnv, PostprocessStack} from "../application/postprocess-stack";
 
-export class AppStage extends cdk.Stage {
+export class ProdDeployStage extends cdk.Stage {
 
     constructor(scope: Construct, id: string, props?: cdk.StageProps) {
         super(scope, id, props);
@@ -11,7 +11,7 @@ export class AppStage extends cdk.Stage {
         const backendStack = new BackendStack(this, 'BackendStack', {});
         new PostprocessStack(this, 'PostProcessStack', {
             backendTable: backendStack.backendTable,
-            deployEnv: DeployEnv.test
+            deployEnv: DeployEnv.prod
         });
 
     }

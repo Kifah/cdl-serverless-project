@@ -42,6 +42,9 @@ export class PostprocessStack extends cdk.Stack {
             tracing: lambda.Tracing.ACTIVE,
             entry: 'resources/postprocess/postprocess.ts',
             handler: "handler",
+            environment: {
+                DEPLOY_ENV: props.deployEnv.toString(),
+            }
 
         });
 
