@@ -5,7 +5,6 @@ import * as lambda from 'aws-cdk-lib/aws-lambda';
 import {NodejsFunction} from 'aws-cdk-lib/aws-lambda-nodejs';
 import * as dynamodb from 'aws-cdk-lib/aws-dynamodb';
 import * as lambdaEventSources from 'aws-cdk-lib/aws-lambda-event-sources';
-import {join} from 'path';
 
 interface PostprocessStackProps extends cdk.StackProps {
     backendTable: dynamodb.ITable
@@ -38,6 +37,11 @@ export class PostprocessStack extends cdk.Stack {
             handler: "handler",
 
         });
+
+        const policyStatement = new cdk.aws_iam.PolicyStatement();
+        policyStatement.addActions('appconfig:GetConfiguration');
+        policyStatement.addResources('arn:aws:appconfig:eu-central-1:832476498399:*');
+        postProcessHandler.addToRolePolicy(policyStatement);
 
 
         const tableEventSource = new lambdaEventSources.DynamoEventSource(props.backendTable, {
