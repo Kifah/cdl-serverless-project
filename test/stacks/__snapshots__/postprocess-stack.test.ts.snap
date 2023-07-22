@@ -20,7 +20,7 @@ exports[`Matches the snapshot 1`] = `
           "S3Bucket": {
             "Fn::Sub": "cdk-hnb659fds-assets-\${AWS::AccountId}-\${AWS::Region}",
           },
-          "S3Key": "2c8e040589299b6b14cefd62dbe4735be6d6f4cbf955f2306775d8a8038cdf80.zip",
+          "S3Key": "36551a1ba508d012a631e8b61d8c8c3794c483b8f51225203f54979cec8af2a6.zip",
         },
         "Environment": {
           "Variables": {
@@ -85,7 +85,7 @@ exports[`Matches the snapshot 1`] = `
               "Resource": "*",
             },
             {
-              "Action": "appconfig:GetConfiguration",
+              "Action": "appconfig:*",
               "Effect": "Allow",
               "Resource": "arn:aws:appconfig:eu-central-1:832476498399:*",
             },

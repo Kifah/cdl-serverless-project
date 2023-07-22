@@ -7,9 +7,9 @@ const client = new AppConfigClient({region: "eu-central-1"});
 async function handler(event: SQSEvent) {
 
     const input = { // GetConfigurationRequest
-        Application: "u3qxe82", // required
-        Environment: "w12u7od", // required
-        Configuration: "mzujdco", // required
+        Application: "issues-app", // required
+        Environment: "dev", // required
+        Configuration: "notification-information", // required
         ClientId: "STRING_VALUE", // required
         ClientConfigurationVersion: "2",
     };

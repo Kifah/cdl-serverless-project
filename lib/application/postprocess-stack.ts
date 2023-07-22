@@ -39,7 +39,7 @@ export class PostprocessStack extends cdk.Stack {
         });
 
         const policyStatement = new cdk.aws_iam.PolicyStatement();
-        policyStatement.addActions('appconfig:GetConfiguration');
+        policyStatement.addActions('appconfig:*');
         policyStatement.addResources('arn:aws:appconfig:eu-central-1:832476498399:*');
         postProcessHandler.addToRolePolicy(policyStatement);
 
