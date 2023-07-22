@@ -25,7 +25,7 @@ exports[`Matches the snapshot 1`] = `
         "Environment": {
           "Variables": {
             "AWS_NODEJS_CONNECTION_REUSE_ENABLED": "1",
-            "DEPLOY_ENV": "0",
+            "DEPLOY_ENV": "test",
           },
         },
         "Handler": "index.handler",
