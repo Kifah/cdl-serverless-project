@@ -12,8 +12,10 @@ export enum DeployEnv {
     'prod' = 'prod',
 }
 
-const accountId = '832476498399';
 const parameterStoreId = 'cdk-app';
+const accountId = '832476498399';
+const region = 'eu-central-1';
+const envEU = {account: accountId, region: region};
 
 interface PostprocessStackProps extends cdk.StackProps {
     backendTable: dynamodb.ITable,
