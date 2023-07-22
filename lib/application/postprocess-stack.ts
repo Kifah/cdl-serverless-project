@@ -8,7 +8,7 @@ import * as lambdaEventSources from 'aws-cdk-lib/aws-lambda-event-sources';
 
 export enum DeployEnv {
     'test'='test',
-    'prod'='test',
+    'prod'='prod',
 }
 
 interface PostprocessStackProps extends cdk.StackProps {
@@ -43,7 +43,7 @@ export class PostprocessStack extends cdk.Stack {
             entry: 'resources/postprocess/postprocess.ts',
             handler: "handler",
             environment: {
-                DEPLOY_ENV: props.deployEnv,
+                DEPLOY_ENV: props.deployEnv.toString(),
             }
 
         });

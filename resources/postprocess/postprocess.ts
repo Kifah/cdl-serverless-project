@@ -9,7 +9,7 @@ async function handler(event: SQSEvent) {
         "Application": "issues-app",
         "ClientId": "example-id",
         "Configuration": "notification-information",
-        "Environment": process.env.DEPLOY_ENV,
+        "Environment": process.env.DEPLOY_ENV
     };
 
     const command = new GetConfigurationCommand(input);
