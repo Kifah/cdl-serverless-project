@@ -5,17 +5,11 @@ import * as lambda from 'aws-cdk-lib/aws-lambda';
 import {NodejsFunction} from 'aws-cdk-lib/aws-lambda-nodejs';
 import * as dynamodb from 'aws-cdk-lib/aws-dynamodb';
 import * as lambdaEventSources from 'aws-cdk-lib/aws-lambda-event-sources';
-import {getConfigByEnv} from "../../utils/deploy-config-builder";
 
 export enum DeployEnv {
-    'test' = 'test',
-    'prod' = 'prod',
+    'test'='test',
+    'prod'='prod',
 }
-
-const parameterStoreId = 'cdk-app';
-const accountId = '832476498399';
-const region = 'eu-central-1';
-const envEU = {account: accountId, region: region};
 
 interface PostprocessStackProps extends cdk.StackProps {
     backendTable: dynamodb.ITable,
@@ -26,11 +20,6 @@ interface PostprocessStackProps extends cdk.StackProps {
 export class PostprocessStack extends cdk.Stack {
     constructor(scope: Construct, id: string, props: PostprocessStackProps) {
         super(scope, id, props);
-
-        const latestConfigsJson = cdk.aws_ssm.StringParameter.valueFromLookup(
-            this, parameterStoreId);
-
-        const deployConfigs = getConfigByEnv(latestConfigsJson, props.deployEnv.toString())
 
 
         const queue = new sqs.Queue(this, 'CdkPlayQueue', {
@@ -54,14 +43,14 @@ export class PostprocessStack extends cdk.Stack {
             entry: 'resources/postprocess/postprocess.ts',
             handler: "handler",
             environment: {
-                ADMIN_EMAIL: deployConfigs.admin_email,
+                DEPLOY_ENV: props.deployEnv.toString(),
             }
 
         });
 
         const policyStatement = new cdk.aws_iam.PolicyStatement();
         policyStatement.addActions('appconfig:*');
-        policyStatement.addResources('arn:aws:appconfig:eu-central-1:' + accountId + ':*');
+        policyStatement.addResources('arn:aws:appconfig:eu-central-1:832476498399:*');
         postProcessHandler.addToRolePolicy(policyStatement);
 
 

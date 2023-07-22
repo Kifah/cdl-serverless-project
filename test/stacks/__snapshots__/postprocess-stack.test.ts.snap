@@ -1,0 +1,311 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Matches the snapshot 1`] = `
+{
+  "Parameters": {
+    "BootstrapVersion": {
+      "Default": "/cdk-bootstrap/hnb659fds/version",
+      "Description": "Version of the CDK Bootstrap resources in this environment, automatically retrieved from SSM Parameter Store. [cdk:skip]",
+      "Type": "AWS::SSM::Parameter::Value<String>",
+    },
+  },
+  "Resources": {
+    "CdkPlayPostProcessHandler025D545F": {
+      "DependsOn": [
+        "CdkPlayPostProcessHandlerServiceRoleDefaultPolicyA222676E",
+        "CdkPlayPostProcessHandlerServiceRole76F78D2B",
+      ],
+      "Properties": {
+        "Code": {
+          "S3Bucket": {
+            "Fn::Sub": "cdk-hnb659fds-assets-\${AWS::AccountId}-\${AWS::Region}",
+          },
+          "S3Key": "a7fc2486623acdc273db16119b4e3cd7215aec00a3f52b2f6c3399de3f396039.zip",
+        },
+        "Environment": {
+          "Variables": {
+            "AWS_NODEJS_CONNECTION_REUSE_ENABLED": "1",
+            "DEPLOY_ENV": "test",
+          },
+        },
+        "Handler": "index.handler",
+        "Role": {
+          "Fn::GetAtt": [
+            "CdkPlayPostProcessHandlerServiceRole76F78D2B",
+            "Arn",
+          ],
+        },
+        "Runtime": "nodejs18.x",
+        "TracingConfig": {
+          "Mode": "Active",
+        },
+      },
+      "Type": "AWS::Lambda::Function",
+    },
+    "CdkPlayPostProcessHandlerServiceRole76F78D2B": {
+      "Properties": {
+        "AssumeRolePolicyDocument": {
+          "Statement": [
+            {
+              "Action": "sts:AssumeRole",
+              "Effect": "Allow",
+              "Principal": {
+                "Service": "lambda.amazonaws.com",
+              },
+            },
+          ],
+          "Version": "2012-10-17",
+        },
+        "ManagedPolicyArns": [
+          {
+            "Fn::Join": [
+              "",
+              [
+                "arn:",
+                {
+                  "Ref": "AWS::Partition",
+                },
+                ":iam::aws:policy/service-role/AWSLambdaBasicExecutionRole",
+              ],
+            ],
+          },
+        ],
+      },
+      "Type": "AWS::IAM::Role",
+    },
+    "CdkPlayPostProcessHandlerServiceRoleDefaultPolicyA222676E": {
+      "Properties": {
+        "PolicyDocument": {
+          "Statement": [
+            {
+              "Action": [
+                "xray:PutTraceSegments",
+                "xray:PutTelemetryRecords",
+              ],
+              "Effect": "Allow",
+              "Resource": "*",
+            },
+            {
+              "Action": "appconfig:*",
+              "Effect": "Allow",
+              "Resource": "arn:aws:appconfig:eu-central-1:832476498399:*",
+            },
+            {
+              "Action": [
+                "sqs:ReceiveMessage",
+                "sqs:ChangeMessageVisibility",
+                "sqs:GetQueueUrl",
+                "sqs:DeleteMessage",
+                "sqs:GetQueueAttributes",
+              ],
+              "Effect": "Allow",
+              "Resource": {
+                "Fn::GetAtt": [
+                  "CdkPlayQueue78BDD396",
+                  "Arn",
+                ],
+              },
+            },
+          ],
+          "Version": "2012-10-17",
+        },
+        "PolicyName": "CdkPlayPostProcessHandlerServiceRoleDefaultPolicyA222676E",
+        "Roles": [
+          {
+            "Ref": "CdkPlayPostProcessHandlerServiceRole76F78D2B",
+          },
+        ],
+      },
+      "Type": "AWS::IAM::Policy",
+    },
+    "CdkPlayPostProcessHandlerSqsEventSourcePostProcessStackCdkPlayQueue68C56F146FEA2067": {
+      "Properties": {
+        "EventSourceArn": {
+          "Fn::GetAtt": [
+            "CdkPlayQueue78BDD396",
+            "Arn",
+          ],
+        },
+        "FunctionName": {
+          "Ref": "CdkPlayPostProcessHandler025D545F",
+        },
+      },
+      "Type": "AWS::Lambda::EventSourceMapping",
+    },
+    "CdkPlayPreProcessHandler6CA76BA8": {
+      "DependsOn": [
+        "CdkPlayPreProcessHandlerServiceRoleDefaultPolicy8DACD1C1",
+        "CdkPlayPreProcessHandlerServiceRole55175F02",
+      ],
+      "Properties": {
+        "Code": {
+          "S3Bucket": {
+            "Fn::Sub": "cdk-hnb659fds-assets-\${AWS::AccountId}-\${AWS::Region}",
+          },
+          "S3Key": "9344e49b5eb4c4139ef4008ce57728c1d86e79fcf18cb1d948d198c587516e62.zip",
+        },
+        "Environment": {
+          "Variables": {
+            "AWS_NODEJS_CONNECTION_REUSE_ENABLED": "1",
+            "SQS_URL": {
+              "Ref": "CdkPlayQueue78BDD396",
+            },
+          },
+        },
+        "Handler": "index.handler",
+        "Role": {
+          "Fn::GetAtt": [
+            "CdkPlayPreProcessHandlerServiceRole55175F02",
+            "Arn",
+          ],
+        },
+        "Runtime": "nodejs18.x",
+        "TracingConfig": {
+          "Mode": "Active",
+        },
+      },
+      "Type": "AWS::Lambda::Function",
+    },
+    "CdkPlayPreProcessHandlerDynamoDBEventSourceBackendTestStackCdkPlayBackendTable3924BCEEB1649CBA": {
+      "Properties": {
+        "BatchSize": 100,
+        "EventSourceArn": {
+          "Fn::ImportValue": "BackendTestStack:ExportsOutputFnGetAttCdkPlayBackendTable5A795537StreamArn9EDDD18B",
+        },
+        "FilterCriteria": {
+          "Filters": [
+            {
+              "Pattern": "{"eventName":["INSERT"]}",
+            },
+          ],
+        },
+        "FunctionName": {
+          "Ref": "CdkPlayPreProcessHandler6CA76BA8",
+        },
+        "StartingPosition": "LATEST",
+      },
+      "Type": "AWS::Lambda::EventSourceMapping",
+    },
+    "CdkPlayPreProcessHandlerServiceRole55175F02": {
+      "Properties": {
+        "AssumeRolePolicyDocument": {
+          "Statement": [
+            {
+              "Action": "sts:AssumeRole",
+              "Effect": "Allow",
+              "Principal": {
+                "Service": "lambda.amazonaws.com",
+              },
+            },
+          ],
+          "Version": "2012-10-17",
+        },
+        "ManagedPolicyArns": [
+          {
+            "Fn::Join": [
+              "",
+              [
+                "arn:",
+                {
+                  "Ref": "AWS::Partition",
+                },
+                ":iam::aws:policy/service-role/AWSLambdaBasicExecutionRole",
+              ],
+            ],
+          },
+        ],
+      },
+      "Type": "AWS::IAM::Role",
+    },
+    "CdkPlayPreProcessHandlerServiceRoleDefaultPolicy8DACD1C1": {
+      "Properties": {
+        "PolicyDocument": {
+          "Statement": [
+            {
+              "Action": [
+                "xray:PutTraceSegments",
+                "xray:PutTelemetryRecords",
+              ],
+              "Effect": "Allow",
+              "Resource": "*",
+            },
+            {
+              "Action": "dynamodb:ListStreams",
+              "Effect": "Allow",
+              "Resource": "*",
+            },
+            {
+              "Action": [
+                "dynamodb:DescribeStream",
+                "dynamodb:GetRecords",
+                "dynamodb:GetShardIterator",
+              ],
+              "Effect": "Allow",
+              "Resource": {
+                "Fn::ImportValue": "BackendTestStack:ExportsOutputFnGetAttCdkPlayBackendTable5A795537StreamArn9EDDD18B",
+              },
+            },
+            {
+              "Action": [
+                "sqs:SendMessage",
+                "sqs:GetQueueAttributes",
+                "sqs:GetQueueUrl",
+              ],
+              "Effect": "Allow",
+              "Resource": {
+                "Fn::GetAtt": [
+                  "CdkPlayQueue78BDD396",
+                  "Arn",
+                ],
+              },
+            },
+          ],
+          "Version": "2012-10-17",
+        },
+        "PolicyName": "CdkPlayPreProcessHandlerServiceRoleDefaultPolicy8DACD1C1",
+        "Roles": [
+          {
+            "Ref": "CdkPlayPreProcessHandlerServiceRole55175F02",
+          },
+        ],
+      },
+      "Type": "AWS::IAM::Policy",
+    },
+    "CdkPlayQueue78BDD396": {
+      "DeletionPolicy": "Delete",
+      "Properties": {
+        "VisibilityTimeout": 300,
+      },
+      "Type": "AWS::SQS::Queue",
+      "UpdateReplacePolicy": "Delete",
+    },
+  },
+  "Rules": {
+    "CheckBootstrapVersion": {
+      "Assertions": [
+        {
+          "Assert": {
+            "Fn::Not": [
+              {
+                "Fn::Contains": [
+                  [
+                    "1",
+                    "2",
+                    "3",
+                    "4",
+                    "5",
+                  ],
+                  {
+                    "Ref": "BootstrapVersion",
+                  },
+                ],
+              },
+            ],
+          },
+          "AssertDescription": "CDK bootstrap stack version 6 required. Please run 'cdk bootstrap' with a recent version of the CDK CLI.",
+        },
+      ],
+    },
+  },
+}
+`;

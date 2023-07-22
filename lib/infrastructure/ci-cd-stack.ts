@@ -4,8 +4,6 @@ import {CodePipeline, CodePipelineSource, ManualApprovalStep, ShellStep} from 'a
 import {TestDeployStage} from "./test-deploy-stage-stack";
 import {ProdDeployStage} from "./prod-deploy-stage";
 
-
-
 export class CiCdStack extends cdk.Stack {
     constructor(scope: Construct, id: string, props?: cdk.StackProps) {
         super(scope, id, props);
