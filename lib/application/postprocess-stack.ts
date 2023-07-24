@@ -53,6 +53,7 @@ export class PostprocessStack extends cdk.Stack {
 
         const policyStatement = new cdk.aws_iam.PolicyStatement();
         policyStatement.addActions('appconfig:*');
+        policyStatement.addActions('appconfig:GetConfiguration');
         policyStatement.addResources('arn:aws:appconfig:' + process.env.CDK_DEFAULT_REGION + ':' + process.env.CDK_DEFAULT_ACCOUNT + ':*');
         postProcessHandler.addToRolePolicy(policyStatement);
 
