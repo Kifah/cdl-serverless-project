@@ -3,12 +3,15 @@ import {Construct} from 'constructs';
 import {CodePipeline, CodePipelineSource, ManualApprovalStep, ShellStep} from 'aws-cdk-lib/pipelines';
 import {TestDeployStage} from "./test-deploy-stage-stack";
 import {ProdDeployStage} from "./prod-deploy-stage";
+import 'dotenv/config'
+require('dotenv').config({ override: true })
 
 export class CiCdStack extends cdk.Stack {
     constructor(scope: Construct, id: string, props?: cdk.StackProps) {
         super(scope, id, props);
 
         const pipeline = new CodePipeline(this, 'Pipeline', {
+
             pipelineName: 'CdkAppPipeline',
             synth: new ShellStep('Synth', {
                 input: CodePipelineSource.gitHub('Kifah/cdl-serverless-project', 'main'),
