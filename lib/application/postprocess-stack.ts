@@ -35,9 +35,9 @@ export class PostprocessStack extends cdk.Stack {
 
         const secretName = props.deployEnv.toString() + '-CdkAppDemoPassword';
 
-        const passwordSecret = secretsmanager.Secret.fromSecretNameV2(
+        const dbPasswordSecret = secretsmanager.Secret.fromSecretNameV2(
             this,
-            'db-pwd-id',
+            'secrets-example',
             secretName,
         );
 
@@ -60,8 +60,7 @@ export class PostprocessStack extends cdk.Stack {
             environment: {
                 DEPLOY_ENV: props.deployEnv.toString(),
                 DEPLOY_REGION: process.env.CDK_DEFAULT_REGION || defaultRegion,
-                SECRET_NAME: passwordSecret.secretName,
-                SECRET_VALUE: passwordSecret.secretValue.toString(),
+                
             }
 
         });

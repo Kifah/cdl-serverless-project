@@ -20,34 +20,13 @@ exports[`Matches the snapshot 1`] = `
           "S3Bucket": {
             "Fn::Sub": "cdk-hnb659fds-assets-\${AWS::AccountId}-\${AWS::Region}",
           },
-          "S3Key": "5de40daa3e1d416e9ee69be662b84b76c60cec6d0ddc5819e378e69e853a6699.zip",
+          "S3Key": "c64d7fae511b11cb7b81b08dd52b80ddd66e734c1f4b33cd3fcaa77a7b20b0e0.zip",
         },
         "Environment": {
           "Variables": {
             "AWS_NODEJS_CONNECTION_REUSE_ENABLED": "1",
             "DEPLOY_ENV": "test",
             "DEPLOY_REGION": "eu-central-1",
-            "SECRET_NAME": "test-CdkAppDemoPassword",
-            "SECRET_VALUE": {
-              "Fn::Join": [
-                "",
-                [
-                  "{{resolve:secretsmanager:arn:",
-                  {
-                    "Ref": "AWS::Partition",
-                  },
-                  ":secretsmanager:",
-                  {
-                    "Ref": "AWS::Region",
-                  },
-                  ":",
-                  {
-                    "Ref": "AWS::AccountId",
-                  },
-                  ":secret:test-CdkAppDemoPassword:SecretString:::}}",
-                ],
-              ],
-            },
           },
         },
         "Handler": "index.handler",
