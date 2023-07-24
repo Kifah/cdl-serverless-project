@@ -6,6 +6,7 @@ import {NodejsFunction} from 'aws-cdk-lib/aws-lambda-nodejs';
 import * as dynamodb from 'aws-cdk-lib/aws-dynamodb';
 import * as lambdaEventSources from 'aws-cdk-lib/aws-lambda-event-sources';
 import 'dotenv/config';
+
 require('dotenv').config();
 
 
@@ -46,15 +47,14 @@ export class PostprocessStack extends cdk.Stack {
             entry: 'resources/postprocess/postprocess.ts',
             handler: "handler",
             environment: {
-                DEPLOY_ENV: props.deployEnv.toString(),
+                DEPLOY_ENV: props.deployEnv.toString()
             }
 
         });
 
         const policyStatement = new cdk.aws_iam.PolicyStatement();
-        policyStatement.addActions('appconfig:*');
         policyStatement.addActions('appconfig:GetConfiguration');
-        policyStatement.addResources('arn:aws:appconfig:' + process.env.CDK_DEFAULT_REGION + ':' + process.env.CDK_DEFAULT_ACCOUNT + ':*');
+        policyStatement.addAllResources();
         postProcessHandler.addToRolePolicy(policyStatement);
 
 
