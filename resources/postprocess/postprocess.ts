@@ -1,7 +1,7 @@
 import {SQSEvent} from "aws-lambda";
 import {AppConfigClient, GetConfigurationCommand} from "@aws-sdk/client-appconfig"; // ES Modules import
 
-const client = new AppConfigClient({region: "eu-central-1"});
+const client = new AppConfigClient({region: process.env.DEPLOY_REGION});
 
 async function handler(event: SQSEvent) {
 
