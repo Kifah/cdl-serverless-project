@@ -34,7 +34,6 @@
     "dotenv": "^16.3.1",
     "esbuild": "^0.18.15",
     "source-map-support": "^0.5.21",
-    "tslog": "^4.8.2",
     "uuid": "^9.0.0"
   }
 }

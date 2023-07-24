@@ -59,9 +59,7 @@ export class PostprocessStack extends cdk.Stack {
         });
 
         const postProcessHandler = new NodejsFunction(this, "CdkPlayPostProcessHandler", {
-            runtime: lambda.Runtime.NODEJS_18_X,
             tracing: lambda.Tracing.ACTIVE,
-            entry: 'resources/postprocess/postprocess.ts',
             handler: "handler",
             environment: {
                 DEPLOY_ENV: props.deployEnv.toString(),
