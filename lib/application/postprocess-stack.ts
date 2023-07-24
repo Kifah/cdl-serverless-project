@@ -5,8 +5,8 @@ import * as lambda from 'aws-cdk-lib/aws-lambda';
 import {NodejsFunction} from 'aws-cdk-lib/aws-lambda-nodejs';
 import * as dynamodb from 'aws-cdk-lib/aws-dynamodb';
 import * as lambdaEventSources from 'aws-cdk-lib/aws-lambda-event-sources';
-import 'dotenv/config'
-require('dotenv').config({override: true})
+import 'dotenv/config';
+require('dotenv').config();
 
 
 export enum DeployEnv {
