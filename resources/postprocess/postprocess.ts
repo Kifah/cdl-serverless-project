@@ -14,13 +14,14 @@ async function handler(event: SQSEvent) {
 
     const command = new GetConfigurationCommand(input);
 
-    // This fires after the blob has been read/loaded.
+    // This first after the blob has been read/loaded.
     const response = await client.send(command);
     const obfuscated = response.Content;
     const configuration = new TextDecoder().decode(obfuscated);
     console.log('region of app config:');
     console.log(process.env.DEPLOY_REGION);
-
+    console.log('SECRET_NAME 👉', process.env.SECRET_NAME);
+    console.log('SECRET_VALUE 👉', process.env.SECRET_VALUE);
     console.log('notification will be sent to:');
     console.log(configuration);
     console.log(JSON.stringify(event));

@@ -5,6 +5,7 @@ import * as lambda from 'aws-cdk-lib/aws-lambda';
 import {NodejsFunction} from 'aws-cdk-lib/aws-lambda-nodejs';
 import * as dynamodb from 'aws-cdk-lib/aws-dynamodb';
 import * as lambdaEventSources from 'aws-cdk-lib/aws-lambda-event-sources';
+import * as secretsmanager from 'aws-cdk-lib/aws-secretsmanager';
 import 'dotenv/config';
 
 require('dotenv').config();
@@ -32,6 +33,14 @@ export class PostprocessStack extends cdk.Stack {
             visibilityTimeout: cdk.Duration.seconds(300)
         });
 
+        const secretName = props.deployEnv.toString() + '-CdkAppDemoPassword';
+
+        const passwordSecret = secretsmanager.Secret.fromSecretNameV2(
+            this,
+            'db-pwd-id',
+            secretName,
+        );
+
         // a pre-processing lambda receives messages from dynamoDB
         const preProcessHandler = new NodejsFunction(this, "CdkPlayPreProcessHandler", {
             runtime: lambda.Runtime.NODEJS_18_X,
@@ -51,6 +60,8 @@ export class PostprocessStack extends cdk.Stack {
             environment: {
                 DEPLOY_ENV: props.deployEnv.toString(),
                 DEPLOY_REGION: process.env.CDK_DEFAULT_REGION || defaultRegion,
+                SECRET_NAME: passwordSecret.secretName,
+                SECRET_VALUE: passwordSecret.secretValue.toString(),
             }
 
         });
