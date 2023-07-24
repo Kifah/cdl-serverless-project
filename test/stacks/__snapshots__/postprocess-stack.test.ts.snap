@@ -24,11 +24,14 @@ exports[`Matches the snapshot 1`] = `
           "S3Bucket": {
             "Fn::Sub": "cdk-hnb659fds-assets-\${AWS::AccountId}-\${AWS::Region}",
           },
-          "S3Key": "c64d7fae511b11cb7b81b08dd52b80ddd66e734c1f4b33cd3fcaa77a7b20b0e0.zip",
+          "S3Key": "100cf6125e909f18804a78b603c743315a2e54d059fc58e6984d5f9afc3a4f3c.zip",
         },
         "Environment": {
           "Variables": {
             "AWS_NODEJS_CONNECTION_REUSE_ENABLED": "1",
+            "DEPLOY_CONFIG": {
+              "Ref": "SsmParameterValuetestCdkAppDemoUserC96584B6F00A464EAD1953AFF4B05118Parameter",
+            },
             "DEPLOY_ENV": "test",
             "DEPLOY_REGION": "eu-central-1",
           },

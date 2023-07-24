@@ -41,10 +41,11 @@ export class PostprocessStack extends cdk.Stack {
             'secrets-example',
             secretName,
         );
-        const ssmParameterName = props.deployEnv.toString() + '-CdkAppDemoUser';
+
         //example of grabbing a plan text value, for a specific enviornment
-        const latestStringToken = ssm.StringParameter.valueForStringParameter(
-            this, ssmParameterName);
+        const configsFromSsmName = props.deployEnv.toString() + '-CdkAppDemoUser';
+        const ssmConfigsForEnv = ssm.StringParameter.valueForStringParameter(
+            this, configsFromSsmName);
 
         // a pre-processing lambda receives messages from dynamoDB
         const preProcessHandler = new NodejsFunction(this, "CdkPlayPreProcessHandler", {
@@ -65,6 +66,7 @@ export class PostprocessStack extends cdk.Stack {
             environment: {
                 DEPLOY_ENV: props.deployEnv.toString(),
                 DEPLOY_REGION: process.env.CDK_DEFAULT_REGION || defaultRegion,
+                DEPLOY_CONFIG: ssmConfigsForEnv.toString()
             }
         });
 

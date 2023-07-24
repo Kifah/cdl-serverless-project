@@ -20,6 +20,8 @@ async function handler(event: SQSEvent) {
     const configuration = new TextDecoder().decode(obfuscated);
     console.log('region of app config:');
     console.log(process.env.DEPLOY_REGION);
+    console.log('configs from ssm:');
+    console.log(process.env.DEPLOY_CONFIG);
 
     console.log('notification will be sent to:');
     console.log(configuration);
