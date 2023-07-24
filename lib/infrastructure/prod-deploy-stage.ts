@@ -3,7 +3,7 @@ import {Construct} from "constructs";
 import {BackendStack} from "../application/backend-stack";
 import {DeployEnv, PostprocessStack} from "../application/postprocess-stack";
 
-const envEU = {account: '832476498399', region: 'eu-central-1'};
+const envEU = {account: process.env.CDK_DEFAULT_ACCOUNT, region: 'process.env.CDK_DEFAULT_REGION'};
 
 export class ProdDeployStage extends cdk.Stage {
 

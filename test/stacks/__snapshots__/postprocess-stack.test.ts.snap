@@ -88,7 +88,7 @@ exports[`Matches the snapshot 1`] = `
             {
               "Action": "appconfig:*",
               "Effect": "Allow",
-              "Resource": "arn:aws:appconfig:eu-central-1:undefined:*",
+              "Resource": "arn:aws:appconfig:undefined:undefined:*",
             },
             {
               "Action": [

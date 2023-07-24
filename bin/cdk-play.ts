@@ -7,7 +7,7 @@ import {CiCdStack} from "../lib/infrastructure/ci-cd-stack";
 // import {AwsSolutionsChecks} from "cdk-nag";
 
 const app = new cdk.App();
-const envEU = {account: '832476498399', region: 'eu-central-1'};
+const envEU = {account: process.env.CDK_DEFAULT_ACCOUNT, region: process.env.CDK_DEFAULT_REGION};
 
 new CiCdStack(app, 'CiCdStack', {env: envEU});
 const backendStack = new BackendStack(app, 'BackendStack', {env: envEU});
