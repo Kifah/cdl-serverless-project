@@ -4,6 +4,10 @@ import * as cdk from 'aws-cdk-lib';
 import {DeployEnv, PostprocessStack} from '../lib/application/postprocess-stack';
 import {BackendStack} from "../lib/application/backend-stack";
 import {CiCdStack} from "../lib/infrastructure/ci-cd-stack";
+import 'dotenv/config'
+require('dotenv').config({ override: true })
+
+
 // import {AwsSolutionsChecks} from "cdk-nag";
 
 const app = new cdk.App();

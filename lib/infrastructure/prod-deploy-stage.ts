@@ -2,8 +2,11 @@ import * as cdk from 'aws-cdk-lib';
 import {Construct} from "constructs";
 import {BackendStack} from "../application/backend-stack";
 import {DeployEnv, PostprocessStack} from "../application/postprocess-stack";
+import 'dotenv/config'
+require('dotenv').config({ override: true })
 
-const envEU = {account: process.env.CDK_DEFAULT_ACCOUNT, region: 'process.env.CDK_DEFAULT_REGION'};
+
+const envEU = {account: process.env.CDK_DEFAULT_ACCOUNT, region: process.env.CDK_DEFAULT_ACCOUNT};
 
 export class ProdDeployStage extends cdk.Stage {
 
