@@ -7,8 +7,14 @@ import {CiCdStack} from "../lib/infrastructure/ci-cd-stack";
 // import {AwsSolutionsChecks} from "cdk-nag";
 
 const app = new cdk.App();
-new CiCdStack(app, 'CiCdStack');
-const backendStack = new BackendStack(app, 'BackendStack', {});
-new PostprocessStack(app, 'PostProcessStack', {backendTable: backendStack.backendTable, deployEnv: DeployEnv.test});
+const envEU = {account: '832476498399', region: 'eu-central-1'};
+
+new CiCdStack(app, 'CiCdStack', {env: envEU});
+const backendStack = new BackendStack(app, 'BackendStack', {env: envEU});
+new PostprocessStack(app, 'PostProcessStack', {
+    backendTable: backendStack.backendTable,
+    deployEnv: DeployEnv.test,
+    env: envEU
+});
 
 // cdk.Aspects.of(app).add(new AwsSolutionsChecks({ verbose: true }));

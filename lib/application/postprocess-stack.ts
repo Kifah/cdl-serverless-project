@@ -6,9 +6,10 @@ import {NodejsFunction} from 'aws-cdk-lib/aws-lambda-nodejs';
 import * as dynamodb from 'aws-cdk-lib/aws-dynamodb';
 import * as lambdaEventSources from 'aws-cdk-lib/aws-lambda-event-sources';
 
+
 export enum DeployEnv {
-    'test'='test',
-    'prod'='prod',
+    'test' = 'test',
+    'prod' = 'prod',
 }
 
 interface PostprocessStackProps extends cdk.StackProps {
@@ -50,7 +51,7 @@ export class PostprocessStack extends cdk.Stack {
 
         const policyStatement = new cdk.aws_iam.PolicyStatement();
         policyStatement.addActions('appconfig:*');
-        policyStatement.addResources('arn:aws:appconfig:eu-central-1:832476498399:*');
+        policyStatement.addResources('arn:aws:appconfig:eu-central-1:' + props.env?.account + ':*');
         postProcessHandler.addToRolePolicy(policyStatement);
 
 
