@@ -8,6 +8,10 @@ exports[`Matches the snapshot 1`] = `
       "Description": "Version of the CDK Bootstrap resources in this environment, automatically retrieved from SSM Parameter Store. [cdk:skip]",
       "Type": "AWS::SSM::Parameter::Value<String>",
     },
+    "SsmParameterValuetestCdkAppDemoUserC96584B6F00A464EAD1953AFF4B05118Parameter": {
+      "Default": "test-CdkAppDemoUser",
+      "Type": "AWS::SSM::Parameter::Value<String>",
+    },
   },
   "Resources": {
     "CdkPlayPostProcessHandler025D545F": {
