@@ -18,7 +18,8 @@ async function handler(event: SQSEvent) {
     const response = await client.send(command);
     const obfuscated = response.Content;
     const configuration = new TextDecoder().decode(obfuscated);
-
+    console.log('region of app config:');
+    console.log(process.env.DEPLOY_REGION);
 
     console.log('notification will be sent to:');
     console.log(configuration);
