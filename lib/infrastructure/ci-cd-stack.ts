@@ -14,13 +14,10 @@ export class CiCdStack extends cdk.Stack {
             synth: new ShellStep('Synth', {
                 input: CodePipelineSource.gitHub('Kifah/cdl-serverless-project', 'main'),
                 commands: [
-                    'cd ${CODEBUILD_SRC_DIR}/cdk',
                     'npm ci',
                     'npm run build',
-                    'cd ${CODEBUILD_SRC_DIR}/cdk/packages/infrastructure',
                     'npx cdk synth'
-                ],
-                primaryOutputDirectory: '${CODEBUILD_SRC_DIR}/cdk/packages/infrastructure/cdk.out'
+                ]
             })
         });
         const testingStage = pipeline.addStage(new TestDeployStage(this, "Test-Deployment", {}));
