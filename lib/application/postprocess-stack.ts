@@ -6,7 +6,7 @@ import {NodejsFunction} from 'aws-cdk-lib/aws-lambda-nodejs';
 import * as dynamodb from 'aws-cdk-lib/aws-dynamodb';
 import * as lambdaEventSources from 'aws-cdk-lib/aws-lambda-event-sources';
 import * as ssm from 'aws-cdk-lib/aws-ssm';
-import * as secretsmanager from 'aws-cdk-lib/aws-secretsmanager';
+import * as secretsManager from 'aws-cdk-lib/aws-secretsmanager';
 import 'dotenv/config';
 
 require('dotenv').config();
@@ -36,7 +36,7 @@ export class PostprocessStack extends cdk.Stack {
 
         //example of grabbing a secret value for an enviornment
         const secretName = props.deployEnv.toString() + '-CdkAppDemoPassword';
-        const dbPasswordSecret = secretsmanager.Secret.fromSecretNameV2(
+        const dbPasswordSecret = secretsManager.Secret.fromSecretNameV2(
             this,
             'secrets-example',
             secretName,
