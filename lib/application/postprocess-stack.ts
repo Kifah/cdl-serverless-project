@@ -58,7 +58,7 @@ export class PostprocessStack extends cdk.Stack {
             }
         });
 
-        const postProcessHandler = new NodejsFunction(this, "CdkPlayPostProcessHandler", {
+        const postProcessHandler = new NodejsFunction(this, "postprocess", {
             tracing: lambda.Tracing.ACTIVE,
             handler: "handler",
             environment: {
