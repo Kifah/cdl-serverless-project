@@ -5,6 +5,8 @@ import * as lambda from 'aws-cdk-lib/aws-lambda';
 import {NodejsFunction} from 'aws-cdk-lib/aws-lambda-nodejs';
 import * as dynamodb from 'aws-cdk-lib/aws-dynamodb';
 import * as lambdaEventSources from 'aws-cdk-lib/aws-lambda-event-sources';
+import 'dotenv/config'
+require('dotenv').config({override: true})
 
 
 export enum DeployEnv {
@@ -51,7 +53,7 @@ export class PostprocessStack extends cdk.Stack {
 
         const policyStatement = new cdk.aws_iam.PolicyStatement();
         policyStatement.addActions('appconfig:*');
-        policyStatement.addResources('arn:aws:appconfig:' + props.env?.region + ':' + props.env?.account + ':*');
+        policyStatement.addResources('arn:aws:appconfig:' + process.env.CDK_DEFAULT_ACCOUNT + ':' + process.env.CDK_DEFAULT_REGION + ':*');
         postProcessHandler.addToRolePolicy(policyStatement);
 
 
