@@ -1,7 +1,0 @@
-{
-  "name": "cdk-play-lambdas",
-  "version": "0.1.0",
-  "dependencies": {
-    "@aws-sdk/client-sqs": "^3.370.0"
-  }
-}
