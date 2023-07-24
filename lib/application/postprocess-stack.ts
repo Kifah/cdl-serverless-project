@@ -15,6 +15,8 @@ export enum DeployEnv {
     'prod' = 'prod',
 }
 
+const defaultRegion = "eu-central-1";
+
 interface PostprocessStackProps extends cdk.StackProps {
     backendTable: dynamodb.ITable,
     deployEnv: DeployEnv
@@ -47,7 +49,8 @@ export class PostprocessStack extends cdk.Stack {
             entry: 'resources/postprocess/postprocess.ts',
             handler: "handler",
             environment: {
-                DEPLOY_ENV: props.deployEnv.toString()
+                DEPLOY_ENV: props.deployEnv.toString(),
+                DEPLOY_REGION: process.env.CDK_DEFAULT_REGION || defaultRegion,
             }
 
         });
