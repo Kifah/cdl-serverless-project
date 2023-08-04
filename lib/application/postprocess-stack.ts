@@ -64,6 +64,7 @@ export class PostprocessStack extends cdk.Stack {
             }
         });
 
+        
         const policyStatement = new cdk.aws_iam.PolicyStatement();
         policyStatement.addActions('appconfig:GetConfiguration');
         policyStatement.addAllResources();
