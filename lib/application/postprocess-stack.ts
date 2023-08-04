@@ -60,7 +60,7 @@ export class PostprocessStack extends cdk.Stack {
             environment: {
                 DEPLOY_ENV: props.deployEnv.toString(),
                 DEPLOY_REGION: process.env.CDK_DEFAULT_REGION || defaultRegion,
-                USERNAME_PARAM_STORE: ssmConfigsForEnv.toString()
+                PARAM_SORE_CONFIG: ssmConfigsForEnv.toString()
             }
         });
 

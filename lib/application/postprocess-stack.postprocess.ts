@@ -17,16 +17,16 @@ async function handler(event: SQSEvent) {
     // This fires after the blob has been read/loaded.
     const response = await client.send(command);
     const obfuscated = response.Content;
-    const configuration = new TextDecoder().decode(obfuscated);
+    const appConfigConfiguration = new TextDecoder().decode(obfuscated);
     console.log('region of app config:');
     console.log(process.env.DEPLOY_REGION);
-    console.log('configs from ssm:');
-    console.log(process.env.DEPLOY_CONFIG);
+    console.log('configs from parameter store:');
+    console.log(process.env.PARAM_SORE_CONFIG);
 
-    console.log('notification will be sent to:');
-    console.log(configuration);
-    console.log(JSON.stringify(event));
-    console.log(event.Records[0].body);
+    console.log('notification will be sent to (appConfig config):');
+    console.log(appConfigConfiguration);
+    //console.log(JSON.stringify(event));
+    //console.log(event.Records[0].body);
 }
 
 export {handler}
